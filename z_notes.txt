@@ -1,0 +1,39 @@
+instead of using const app = express()
+we can use const router = express.Router();
+
+ex. 
+router.get("/users/all", async (req, res)=>{
+
+})
+
+router.get("/users/new", async (req, res)=>{
+
+})
+
+we use router to make our code neat and clean
+we make routes folder 
+where we created user.js file
+so every api with /user will be in it and we export this file in app.js
+the main use of router is you just specify the common route i.e /user in our case and you dont have to write it everytime
+
+ex.
+in app.js
+we import our route file
+and use middleware
+
+import userRouter from "./routes/user.js")
+app.use("/users", userRouter)
+
+now in router user.js file we just write
+
+router.get("/all", async (req, res)=>{
+
+})
+
+router.get("/new", async (req, res)=>{
+
+})
+
+//**similar we create model folder for storing models i.e mongoose model
+//we create controller folder for storing function
+//we use this folder in our main app.js file by importing which makes app.js file clean and neatly structured

@@ -1,0 +1,94 @@
+import  express  from "express";
+import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
+
+const app = express();
+
+mongoose.connect("mongodb://localhost:27017", {
+    dbName: "backendAPI",
+  }).then(() => console.log("database Connected")).catch(() => console.log(e));
+
+  //Defining Schema
+const UserSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  password: String,
+});
+
+//Creating colecction named userdetail
+const User = mongoose.model("userdetail", UserSchema);
+
+// app.use(express.urlencoded({ extended: true })); to parse url data into req.body
+app.use(express.json()); // to parse json related data
+app.use(cookieParser());
+
+app.get("/", (req, res)=>{
+    res.send("nice");
+});
+
+app.get("/users/all", async (req, res)=>{
+
+    const allUser = await User.find({})
+    res.json({
+        success: true,
+        allUser,
+    })
+})
+
+app.post("/users/new", async (req, res)=>{
+
+    const{name, email, password} = req.body;
+
+    await User.create({
+        name: name, 
+        email: email, 
+        password: password
+    });
+
+    // res.json({
+    //     success: true,
+    //     message: "Registered Successfully",
+    // });
+    res.status(201).cookie("token", "lol").json({ //we can send our status code as well
+        success: true,
+        message: "Registered Successfully",
+    });
+});
+
+
+//if you want to pase parameter in get request then
+//it is good practise to pass then through params or query instead of body
+//we can pase them through query and access the value by their keyword
+//here keyword is "id" and valuw is user's id
+app.get("/userId", async(req,res)=>{
+    console.log(req.query);
+
+    const user2 = await User.findById(req.query.id)
+    res.json({
+        success: true,
+        user2,
+    }); 
+})
+
+//Creating Dynamic API
+//here we can pass parameter in the api and can access them through params
+//it is better approach to pass parametr through get request
+//ex: http://localhost:3000/userId/64a1b88a9bdb7c327ac00518
+app.get("/userId/:id", async(req,res)=>{
+    console.log(req.params);
+
+    const user2 = await User.findById(req.params.id)
+    res.json({
+        success: true,
+        user2,
+    }); 
+})
+//always try to put dynamic api route at the end 
+//as if there is api "/userId/special" and put it last and our dynamic is first 
+//then when we call the /special api the dynamic one will execute first as it comes first 
+//and it will consider /special as id parameter and will give error
+
+
+app.listen(3000, ()=>{
+    console.log("server is listning");
+}) 
