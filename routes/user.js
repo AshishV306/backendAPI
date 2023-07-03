@@ -1,20 +1,30 @@
 import express from "express";
-import User from "../models/user.js";
-import { deleteUser, getAllUsers, getUserById, getUserDynamicId, newUsers, updateUser } from "../controllers/user.js";
+import { isAuthenticated } from "../middlewares/auth.js";
+import {login, logout, getAllUsers, getMyProfile, register } from "../controllers/user.js";
+//import {login, deleteUser, getAllUsers, getUserById, getMyProfile, register, updateUser } from "../controllers/user.js";
 
 const router = express.Router();
 
 router.get("/all", getAllUsers);
 
-router.post("/new", newUsers);
+router.post("/new", register);
 
-router.get("/userId", getUserById);
+router.post("/login", login);
 
-router.get("/userId/:id", getUserDynamicId);
+router.get("/logout", logout);
 
-router.put("/userId/:id", updateUser);
+router.get("/me",isAuthenticated, getMyProfile);
 
-router.delete("/userId/:id", deleteUser);
+// router.get("/userId", getUserById);
+
+//router.get("/userId/:id", getMyProfile);
+
+// router.put("/userId/:id", updateUser);
+
+// router.delete("/userId/:id", deleteUser);
+
+//if the routes are same for requests you can write thiese three as
+//router.route("/userId/:id").get(getUserDynamicId).put(updateUser).delete(deleteUser);
 
 
 export default router;

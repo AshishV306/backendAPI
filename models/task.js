@@ -2,20 +2,23 @@ import express from "express";
 import mongoose from "mongoose";
 
   //Defining Schema
-  const UserSchema = new mongoose.Schema({
-    name: {
+  const TaskSchema = new mongoose.Schema({
+    title: {
         type: String,
         required: true,
     },
-    email: {
+    description: {
         type: String,
         required: true,
-        unique: true,
     },
-    password: {
-        type: String,
+    isCompleted: {
+        type: Boolean,
+        default: false,
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "userdetails",
         required: true,
-        select: false,
     },
     createdAt: {
         type: Date,
@@ -24,6 +27,6 @@ import mongoose from "mongoose";
   });
   
   //Creating colecction named userdetail
- const User = mongoose.model("userdetail", UserSchema);
+  export const Task = mongoose.model("Task", TaskSchema);
 
- export default User;
+  
