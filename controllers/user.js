@@ -44,3 +44,24 @@ export const getUserDynamicId = async(req,res)=>{
         user2,
     }); 
 };
+
+export const updateUser = async(req,res)=>{
+
+    const user2 = await User.findById(req.params.id)
+    res.json({
+        success: true,
+        message: "Updated",
+    }); 
+};
+
+export const deleteUser = async(req,res)=>{
+
+    const user2 = await User.findById(req.params.id)
+
+    // await user2.remove();
+
+    res.json({
+        success: true,
+        message: "Deleted",
+    }); 
+};
